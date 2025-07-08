@@ -1,0 +1,28 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# IDE 配置
+.idea/
+*.iml
+
+# 虚拟环境
+.venv/
+venv/
+
+# 构建文件
+*.spec
+build/
+dist/
+
+# 日志与辅助
+*.log
+*.tmp
+structure.txt
+
+# Windows / macOS 垃圾
+.DS_Store
+Thumbs.db
+
+# 可选：个人脚本快捷方式
+*.lnk
