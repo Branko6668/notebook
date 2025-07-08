@@ -1,0 +1,163 @@
+
+                curr_sum -= nums[left]{% extends 'layout.html' %}
+
+{% block body %}
+<div class="articles-container">
+    <div class="articles-header">
+        <h2>我的收藏</h2>
+    </div>
+
+    <div class="articles-grid">
+        {% if articles %}
+            {% for article in articles %}
+            <div class="article-card">
+                <div class="article-content">
+                    <h3>{{ article.title }}</h3>
+                    <div class="article-meta">
+                        <span><i class="far fa-clock"></i> {{ article.favorite_date }}</span>
+                    </div>
+                    <p class="article-preview">{{ article.content[:150] }}...</p>
+                </div>
+                <div class="article-actions">
+                    <a href="{{ url_for('preview_article', id=article.id) }}" class="action-btn">
+                        <i class="far fa-eye"></i>
+                    </a>
+                    <button onclick="toggleFavorite('{{ article.id }}')" class="action-btn">
+                        <i class="fas fa-star"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-articles">暂无收藏笔记</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.articles-container {
+    max-width: 1200px;
+    margin: 100px auto 20px;
+    padding: 0 20px;
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.article-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 16px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.article-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.article-card h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.article-meta {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.article-preview {
+    font-size: 0.9em;
+    color: #444;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.article-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 1200px) {
+    .articles-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .articles-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .articles-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+function toggleFavorite(articleId) {
+    fetch(`/favorite/${articleId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            // 移除该卡片
+            const card = document.getElementById(`fav-btn-${articleId}`).closest('.article-card');
+            card.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                card.remove();
+                // 如果没有卡片了，显示暂无收藏
+                if (document.querySelectorAll('.article-card').length === 0) {
+                    const noArticles = document.createElement('div');
+                    noArticles.className = 'no-articles';
+                    noArticles.innerHTML = '<p>暂无收藏</p>';
+                    document.querySelector('.articles-grid').appendChild(noArticles);
+                }
+            }, 300);
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.message, 'error');
+        }
+    });
+}
+</script>
+{% endblock %} 

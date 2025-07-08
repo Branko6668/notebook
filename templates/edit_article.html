@@ -1,0 +1,137 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="editor-container">
+    <form method="POST" action="{{ url_for('edit_article', id=article.id) }}">
+        <input type="text" name="title" class="title-input" placeholder="标题" value="{{ article.title }}" required>
+        <div class="editor-toolbar">
+            <button type="button" class="tool-btn" onclick="insertMD('**', '**')"><i class="fas fa-bold"></i></button>
+            <button type="button" class="tool-btn" onclick="insertMD('*', '*')"><i class="fas fa-italic"></i></button>
+            <button type="button" class="tool-btn" onclick="insertMD('# ', '')"><i class="fas fa-heading"></i></button>
+            <div class="divider"></div>
+            <button type="button" class="tool-btn" onclick="insertMD('> ', '')"><i class="fas fa-quote-right"></i></button>
+            <button type="button" class="tool-btn" onclick="insertMD('`', '`')"><i class="fas fa-code"></i></button>
+            <button type="button" class="tool-btn" onclick="insertList('- ')"><i class="fas fa-list-ul"></i></button>
+            <button type="button" class="tool-btn" onclick="insertList('1. ')"><i class="fas fa-list-ol"></i></button>
+            <div class="divider"></div>
+            <button type="button" class="tool-btn" onclick="insertMD('[', '](url)')"><i class="fas fa-link"></i></button>
+            <button type="button" class="tool-btn" onclick="insertMD('![alt](', ')')"><i class="fas fa-image"></i></button>
+        </div>
+        <textarea name="content" id="editor" class="content-editor" placeholder="开始写作...">{{ article.content }}</textarea>
+        <div class="editor-footer">
+            <button type="submit" class="submit-btn">更新笔记</button>
+        </div>
+    </form>
+</div>
+
+<style>
+/* 使用与 add_article.html 相同的样式 */
+.editor-container {
+    max-width: 1200px;
+    margin: 120px auto 40px;
+    padding: 0 20px;
+}
+
+.title-input {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.editor-toolbar {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    gap: 5px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tool-btn {
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tool-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.divider {
+    width: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 5px;
+}
+
+.content-editor {
+    width: 100%;
+    min-height: 500px;
+    padding: 20px;
+    border: none;
+    border-radius: 0 0 12px 12px;
+    background: rgba(255, 255, 255, 0.9);
+    font-family: 'Monaco', monospace;
+    line-height: 1.6;
+    resize: vertical;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.editor-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+</style>
+
+<script>
+function insertMD(prefix, suffix) {
+    const editor = document.getElementById('editor');
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const text = editor.value;
+    const before = text.substring(0, start);
+    const selection = text.substring(start, end);
+    const after = text.substring(end);
+    
+    editor.value = before + prefix + selection + suffix + after;
+    editor.focus();
+    editor.selectionStart = start + prefix.length;
+    editor.selectionEnd = end + prefix.length;
+}
+
+function insertList(prefix) {
+    const editor = document.getElementById('editor');
+    const start = editor.selectionStart;
+    const text = editor.value;
+    const before = text.substring(0, start);
+    
+    editor.value = before + '\n' + prefix;
+    editor.focus();
+    editor.selectionStart = editor.value.length;
+    editor.selectionEnd = editor.value.length;
+}
+</script>
+{% endblock %}

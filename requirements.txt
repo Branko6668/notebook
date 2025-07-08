@@ -1,0 +1,16 @@
+cffi==1.17.1
+click==8.1.8
+colorama==0.4.6
+cryptography==44.0.0
+Flask==2.2.0
+itsdangerous==2.2.0
+Jinja2==3.1.2
+markdown2==2.4.12
+MarkupSafe==2.1.1
+passlib==1.7.4
+pycparser==2.22
+PyMySQL==0.9.3
+setuptools==75.8.0
+Werkzeug==2.2.2
+wheel==0.37.1
+WTForms==2.2.1

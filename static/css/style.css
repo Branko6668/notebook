@@ -1,0 +1,806 @@
+/* 重置样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 全局样式 */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 画布样式 */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* 确保其他内容在画布上层 */
+.navbar, .auth-container, .main-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* 背景容器 */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+/* 浮动块 */
+.floating-block {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform;
+    animation: float 5s ease-in-out infinite;
+    filter: blur(60px);
+    min-width: 400px;
+    min-height: 400px;
+    mix-blend-mode: multiply;
+    opacity: 0.6;
+}
+
+/* 跟随点 */
+.cursor-follower {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    filter: blur(0.5px);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+/* 确保内容在正确的层级 */
+.page-container {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 100px;
+}
+
+.content-container {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #333; /* 确保文字颜色足够深 */
+}
+
+/* 导航栏 */
+.navbar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    z-index: 1000;
+}
+
+/* 导航栏左侧 Logo */
+.nav-title {
+    font-size: 1.5em;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 导航栏右侧链接组 */
+.nav-links {
+    display: flex;
+    gap: 15px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 不同形状的类 */
+.shape-blob {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+}
+
+.shape-blob2 {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.shape-blob3 {
+    border-radius: 40% 60% 30% 70% / 70% 40% 60% 30%;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(var(--move-x), var(--move-y)) scale(1.1);
+    }
+    50% {
+        transform: translate(calc(var(--move-x) * -1), calc(var(--move-y) * -1)) scale(0.9);
+    }
+    75% {
+        transform: translate(var(--move-y), var(--move-x)) scale(1.1);
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* 添加动画路径变化 */
+@keyframes morphing {
+    0% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+    50% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+    100% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+}
+
+.content-wrapper {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 美化卡片样式 */
+.card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: none;
+}
+
+p, span, a {
+    color: #444;
+}
+
+a:link {text-decoration:none;}
+
+.content {
+    padding:10px 20px;
+    background-color: #eee;
+}
+
+.title-center {
+    text-align: center;
+}
+
+.post-author {
+    color:#999;font-style: italic;font-size: 18px;
+}
+
+.underline {
+    border-top: 1px solid gray;
+}
+
+.fr {
+    float:right
+}
+.fl {
+    float:left
+}
+
+.clear {
+    clear:both;
+}
+
+/* 调整内容区域样式 */
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+/* 测试按钮样式 */
+button {
+    padding: 8px 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+/* 可点击元素的通用样式 */
+.clickable-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clickable-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12),
+                0 2px 4px rgba(255, 255, 255, 0.12);
+}
+
+/* 不同类型按钮的柔和色彩变体 */
+.clickable-item.primary {
+    background: rgba(156, 204, 255, 0.1);
+    border-color: rgba(156, 204, 255, 0.2);
+}
+
+.clickable-item.success {
+    background: rgba(178, 223, 178, 0.1);
+    border-color: rgba(178, 223, 178, 0.2);
+}
+
+.clickable-item.warning {
+    background: rgba(255, 218, 156, 0.1);
+    border-color: rgba(255, 218, 156, 0.2);
+}
+
+.clickable-item.info {
+    background: rgba(164, 219, 232, 0.1);
+    border-color: rgba(164, 219, 232, 0.2);
+}
+
+/* 应用到具体元素 */
+a.nav-link,
+button,
+.btn,
+.clickable-card {
+    @extend .clickable-item;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+}
+
+/* 禁用状态 */
+.clickable-item:disabled,
+.clickable-item.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    pointer-events: none;
+}
+
+/* 导航栏样式 */
+.main-nav {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.nav-title {
+    font-size: 1.5em;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    position: relative;
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 渐变背景 */
+.gradient-1 {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(147, 112, 219, 0.3));  /* 金色-紫色 */
+}
+
+.gradient-2 {
+    background: linear-gradient(135deg, rgba(0, 191, 255, 0.3), rgba(255, 165, 0, 0.3));   /* 蓝色-橙色 */
+}
+
+.gradient-3 {
+    background: linear-gradient(135deg, rgba(50, 205, 50, 0.3), rgba(255, 105, 180, 0.3));  /* 绿色-粉色 */
+}
+
+.gradient-4 {
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(0, 255, 255, 0.3));     /* 红色-青色 */
+}
+
+.gradient-5 {
+    background: linear-gradient(135deg, rgba(148, 0, 211, 0.3), rgba(255, 255, 0, 0.3));   /* 紫色-黄色 */
+}
+
+/* 悬停效果 */
+.nav-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.15),
+                0 4px 12px -3px rgba(0, 0, 0, 0.08),
+                inset 0 -3px 8px -3px rgba(0, 0, 0, 0.15);
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-link:hover::before {
+    opacity: 1;
+}
+
+/* 活跃状态 */
+.nav-link.active {
+    box-shadow: 0 2px 12px -4px rgba(0, 0, 0, 0.2),
+                inset 0 2px 8px -2px rgba(0, 0, 0, 0.15);
+    transform: translateY(1px);
+}
+
+/* 调整内容区域，避免被导航栏遮挡 */
+#content-container {
+    margin-top: 100px;
+    padding: 20px;
+}
+
+/* 渐变按钮 */
+.gradient-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 卡片样式 */
+.custom-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-header-1 {
+    background: linear-gradient(135deg, rgba(64, 154, 255, 0.3), rgba(120, 187, 255, 0.3));
+    color: rgba(0, 0, 0, 0.8);
+    border: none;
+    padding: 15px 20px;
+}
+
+.gradient-header-2 {
+    background: linear-gradient(135deg, rgba(255, 184, 76, 0.3), rgba(255, 159, 0, 0.3));
+    color: rgba(0, 0, 0, 0.8);
+    border: none;
+    padding: 15px 20px;
+}
+
+/* 消息提示样式 */
+.alert {
+    padding: 15px;
+    margin: 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.alert-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* 笔记列表容器 */
+.articles-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.articles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    max-height: calc(100vh - 180px);  /* 减去导航栏和页头的高度 */
+    overflow-y: auto;
+    padding: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.articles-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.articles-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.articles-grid::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+/* 笔记卡片 */
+.article-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.article-content h3 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+}
+
+.article-meta {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 10px;
+}
+
+.article-meta span {
+    margin-right: 15px;
+}
+
+.article-preview {
+    font-size: 0.95em;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 15px;
+}
+
+/* 操作按钮 */
+.article-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.action-btn {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.favorite-btn {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 159, 0, 0.3));
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, rgba(64, 154, 255, 0.3), rgba(120, 187, 255, 0.3));
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, rgba(255, 99, 99, 0.3), rgba(255, 132, 132, 0.3));
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 预览页面样式 */
+.preview-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    flex: 1;
+}
+
+.return-btn {
+    margin-left: 20px;
+    padding: 8px 15px;
+    white-space: nowrap;
+}
+
+/* 收藏按钮样式 */
+.favorite-btn i.fas {
+    color: #FFD700;
+}
+
+.markdown-body {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+}
+
+.preview-btn {
+    background: linear-gradient(135deg, rgba(106, 192, 69, 0.3), rgba(39, 174, 96, 0.3));
+}
+
+.view-all-link {
+    float: right;
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.view-all-link:hover {
+    color: rgba(0, 0, 0, 0.8);
+    text-decoration: none;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.article-card {
+    transition: all 0.3s ease;
+}
+
+.favorite-btn i.fas {
+    color: #FFD700;
+}
+
+/* 认证页面样式 */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.gradient-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 消息提示样式 */
+.alert {
+    padding: 15px;
+    margin: 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.alert-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* 文字样式调整 */
+h1, h2, h3, h4, h5, h6 {
+    color: #333;
+}
+
+/* 链接样式 */
+a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1976D2;
+}
+
+/* 调整内容区域的上边距，避免被导航栏遮挡 */
+.content-container, 
+.dashboard-container, 
+.articles-container {
+    margin-top: 100px;
+}
+
+/* 添加全局样式 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* 只在主页禁用滚动 */
+.dashboard-container {
+    height: calc(100vh - 100px);
+    overflow: hidden;
+}
+
+/* 其他页面允许滚动 */
+.content-container:not(.dashboard-container) {
+    min-height: calc(100vh - 100px);
+    overflow-y: auto;
+}

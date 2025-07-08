@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="about-container">
+    <div class="about-card">
+        <h1>个人笔记本</h1>
+        <p class="subtitle">帮助您随时随地记录和管理您的想法。</p>
+        
+        <div class="features">
+            <h2>主要功能</h2>
+            <ul>
+                <li><i class="fas fa-markdown"></i> 支持 Markdown 格式</li>
+                <li><i class="fas fa-star"></i> 笔记收藏功能</li>
+                <li><i class="fas fa-eye"></i> 实时预览</li>
+                <li><i class="fas fa-paint-brush"></i> 简洁的界面设计</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+.about-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px); /* 减去导航栏的高度 */
+    padding: 20px;
+}
+
+.about-card {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.about-card h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.2em;
+    margin-bottom: 40px;
+}
+
+.features {
+    text-align: left;
+    margin-top: 40px;
+}
+
+.features h2 {
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.features li {
+    padding: 10px 0;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.features i {
+    margin-right: 10px;
+    color: #4CAF50;
+}
+</style>
+{% endblock %}

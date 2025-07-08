@@ -1,0 +1,312 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="welcome-section">
+    <h1>欢迎来到个人笔记本</h1>
+    <p class="lead">仰天大笑出门去，我辈岂是蓬蒿人。</p>
+    {% if not session.logged_in %}
+    <div class="auth-buttons">
+        <a href="{{ url_for('register') }}" class="gradient-button gradient-1">注册</a>
+        <a href="{{ url_for('login') }}" class="gradient-button gradient-2">登录</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 只有登录用户才能看到笔记部分 -->
+{% if session.logged_in %}
+<div class="articles-container">
+    <div class="articles-header">
+        <h2>所有笔记</h2>
+        <a href="{{ url_for('add_article') }}" class="add-btn">
+            <i class="fas fa-plus"></i> 新建笔记
+        </a>
+    </div>
+
+    <div class="articles-list">
+        {% if articles %}
+            {% for article in articles %}
+            <div class="article-card" id="article-{{ article.id }}">
+                <div class="article-content">
+                    <h3>{{ article.title }}</h3>
+                    <div class="article-meta">
+                        <span><i class="far fa-clock"></i> {{ article.create_date }}</span>
+                    </div>
+                    <p class="article-preview">{{ article.content[:200] }}...</p>
+                </div>
+                <div class="article-actions">
+                    <a href="{{ url_for('preview_article', id=article.id) }}" class="action-btn view-btn" 
+                       title="查看">
+                        <i class="far fa-eye"></i>
+                    </a>
+                    <button onclick="toggleFavorite('{{ article.id }}')" class="action-btn favorite-btn" 
+                            title="{{ 'Unfavorite' if article.is_favorited else 'Favorite' }}">
+                        <i class="fa{{ 'r' if not article.is_favorited else 's' }} fa-star"></i>
+                    </button>
+                    <a href="{{ url_for('edit_article', id=article.id) }}" class="action-btn edit-btn" 
+                       title="编辑">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <button onclick="deleteArticle('{{ article.id }}')" class="action-btn delete-btn" 
+                            title="删除">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-articles">
+                <p>暂无笔记</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.articles-container {
+    max-width: 1200px;
+    margin: 100px auto 20px;
+    padding: 0 20px;
+    min-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.articles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.add-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.articles-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+    padding-bottom: 40px;
+}
+
+.article-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.article-content {
+    flex: 1;
+}
+
+.article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.article-content h3 {
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.article-meta {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.article-preview {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.article-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    margin-top: auto;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action-btn {
+    flex: 1;
+    padding: 6px;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.view-btn:hover { background: rgba(33, 150, 243, 0.2); }
+.favorite-btn:hover { background: rgba(255, 193, 7, 0.2); }
+.edit-btn:hover { background: rgba(76, 175, 80, 0.2); }
+.delete-btn:hover { background: rgba(244, 67, 54, 0.2); }
+
+.no-articles {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+}
+
+/* 在小屏幕上自动调整列数 */
+@media (max-width: 1200px) {
+    .articles-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .articles-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .articles-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 移除页面级别的 overflow: hidden */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.page-container {
+    min-height: 100vh;
+    padding-top: 80px;
+}
+</style>
+
+<script>
+function deleteArticle(articleId) {
+    if(confirm('确定要删除这篇笔记吗？')) {
+        fetch(`/delete_article/${articleId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success') {
+                const article = document.getElementById(`article-${articleId}`);
+                article.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    article.remove();
+                    showToast('删除成功', 'success');
+                    if(document.querySelectorAll('.article-card').length === 0) {
+                        location.reload();
+                    }
+                }, 300);
+            } else {
+                showToast(data.message || '删除失败', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('删除失败', 'error');
+        });
+    }
+}
+
+function toggleFavorite(articleId) {
+    fetch(`/favorite/${articleId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            const btn = document.querySelector(`#article-${articleId} .favorite-btn i`);
+            if(data.action === 'favorited') {
+                btn.className = 'fas fa-star';
+                showToast('收藏成功', 'success');
+            } else {
+                btn.className = 'far fa-star';
+                showToast('取消收藏成功', 'info');
+            }
+        } else {
+            showToast(data.message || '操作失败', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('操作失败', 'error');
+    });
+}
+
+function createFloatingBlocks() {
+    const container = document.querySelector('.background-animation');
+    
+    // 使用柔和的基础颜色
+    const colors = [
+        'rgb(255, 200, 200)', // 柔和的粉红
+        'rgb(200, 255, 200)', // 柔和的绿色
+        'rgb(200, 200, 255)', // 柔和的蓝色
+        'rgb(255, 255, 200)', // 柔和的黄色
+        'rgb(255, 200, 255)', // 柔和的紫色
+        'rgb(200, 255, 255)'  // 柔和的青色
+    ];
+
+    for (let i = 0; i < 6; i++) {
+        const block = document.createElement('div');
+        block.className = 'floating-block';
+        
+        // 更大的尺寸范围
+        const size = Math.random() * 500 + 500;
+        block.style.width = size + 'px';
+        block.style.height = size + 'px';
+        
+        block.style.backgroundColor = colors[i];
+        
+        // 位置范围
+        block.style.left = (Math.random() * 130 - 15) + 'vw';
+        block.style.top = (Math.random() * 130 - 15) + 'vh';
+        
+        // 更快的动画
+        const duration = Math.random() * 8 + 8; // 8-16秒
+        block.style.animation = `float ${duration}s linear infinite`;
+        
+        // 更大的移动范围
+        block.style.setProperty('--move-x', Math.random() * 800 - 400 + 'px');
+        block.style.setProperty('--move-y', Math.random() * 800 - 400 + 'px');
+        
+        // 随机初始变换
+        const initialScale = 0.9 + Math.random() * 0.2;
+        const initialRotate = Math.random() * 360;
+        block.style.transform = `scale(${initialScale}) rotate(${initialRotate}deg)`;
+        
+        container.appendChild(block);
+        
+        // 为每个色块设置不同的动画延迟
+        block.style.animationDelay = `${-Math.random() * 8}s`;
+    }
+}
+
+// 添加这个：在页面加载时创建浮动块
+document.addEventListener('DOMContentLoaded', function() {
+    createFloatingBlocks();
+});
+</script>
+{% endif %}
+{% endblock %}

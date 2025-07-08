@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="preview-container">
+    <div class="preview-header">
+        <div class="header-content">
+            <h1>{{ article.title }}</h1>
+            <div class="article-meta">
+                <span><i class="far fa-clock"></i> {{ article.create_date }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="markdown-body">
+        {{ markdown_content | safe }}
+    </div>
+</div>
+
+<!-- 引入 GitHub Markdown CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+{% endblock %} 
